@@ -18,10 +18,10 @@ class HomePage extends StatefulWidget {
 enum snakeDirection { UP, DOWN, LEFT, RIGHT }
 
 class _HomePageState extends State<HomePage> {
-
   //userScore
   int currentScore = 0;
 
+  bool gameHasStarted = false;
 
   //grid dimensions
 
@@ -41,8 +41,8 @@ class _HomePageState extends State<HomePage> {
   //game over
   bool gameOver() {
     // the game is over when the snake runs into itself
-    List<int> bodySnake = snakePosition.sublist(0,snakePosition.length - 1);
-    if(bodySnake.contains(snakePosition.last)){
+    List<int> bodySnake = snakePosition.sublist(0, snakePosition.length - 1);
+    if (bodySnake.contains(snakePosition.last)) {
       return true;
     }
     return false;
@@ -50,32 +50,62 @@ class _HomePageState extends State<HomePage> {
 
   //startGame
   void startGame() {
+    gameHasStarted = true;
     Timer.periodic(Duration(milliseconds: 200), (timer) {
       setState(() {
-
         //snake moving
         moveSnake();
 
-        if(gameOver()){
-
-          //displaying message to the user 
-          showDialog(context: context, builder: (context){
-            return AlertDialog(
-              title: Text('Game Over'),
-              content: Text('Your score is:'+ currentScore.toString()),
-            );
-          });
+        if (gameOver()) {
+          //displaying message to the user
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text('Game Over'),
+                  content: Column(
+                    children: [
+                      Text('Your score is:' + currentScore.toString()),
+                      TextField(
+                        decoration: InputDecoration(hintText: "Enter Name"),
+                      )
+                    ],
+                  ),
+                  actions: [
+                    MaterialButton(
+                      onPressed: () {
+                        submitScore();
+                        Navigator.pop(context);
+                        newGame();
+                      },
+                      child: Text('Submit'),
+                    )
+                  ],
+                );
+              });
           timer.cancel();
         }
-
       });
     });
   }
 
-  void eatFood(){
-    currentScore ++;
+  void newGame() {
+    setState(() {
+      snakePosition = [0, 1, 2];
+      foodPosition = 55;
+      currentDirection = snakeDirection.RIGHT;
+      gameHasStarted = false;
+      currentScore = 0;
+    });
+  }
+
+  void submitScore() {}
+
+  void eatFood() {
+    currentScore++;
     //maki
-    while( snakePosition.contains(foodPosition)){
+    while (snakePosition.contains(foodPosition)) {
       foodPosition = Random().nextInt(totalNoOfSquares);
     }
   }
@@ -89,7 +119,6 @@ class _HomePageState extends State<HomePage> {
           } else {
             snakePosition.add(snakePosition.last + 1);
           }
-
         }
         break;
       case snakeDirection.LEFT:
@@ -99,7 +128,6 @@ class _HomePageState extends State<HomePage> {
           } else {
             snakePosition.add(snakePosition.last - 1);
           }
-
         }
         break;
       case snakeDirection.UP:
@@ -118,23 +146,19 @@ class _HomePageState extends State<HomePage> {
           } else {
             snakePosition.add(snakePosition.last + rowSize);
           }
-
         }
         break;
       default:
     }
 
     // snake is eating food
-    if(snakePosition.last == foodPosition){
+    if (snakePosition.last == foodPosition) {
       eatFood();
-    }else{
+    } else {
       //remove tail
       snakePosition.removeAt(0);
     }
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +167,40 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         //highscores
         children: [
-          Expanded(child: Container()),
+          Expanded(
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              //user current score
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Current Score',
+                    style: myFont.copyWith(color: Colors.grey, fontSize: 10),
+                  ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                  Text(
+                    currentScore.toString(),
+                    style: myFont.copyWith(fontSize: 24),
+                  ),
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'High Scores',
+                    style: myFont.copyWith(color: Colors.grey, fontSize: 10),
+                  ),
+                ],
+              ),
+
+              //highscore,top 5
+            ],
+          )),
           Expanded(
               flex: 3,
               child: GestureDetector(
@@ -187,7 +244,7 @@ class _HomePageState extends State<HomePage> {
           Expanded(
               child: GestureDetector(
             onTap: () {
-              startGame();
+              gameHasStarted ? () {} : startGame();
             },
             child: Padding(
               padding: EdgeInsets.only(left: 70, right: 70, bottom: 80),
@@ -195,7 +252,7 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.circular(20),
                 child: Container(
                   padding: EdgeInsets.all(30),
-                  color: Colors.grey,
+                  color: gameHasStarted ? Colors.grey[700] : Colors.grey,
                   child: Center(
                     child: Text(
                       'PLAY GAME',
