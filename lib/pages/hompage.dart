@@ -18,6 +18,11 @@ class HomePage extends StatefulWidget {
 enum snakeDirection { UP, DOWN, LEFT, RIGHT }
 
 class _HomePageState extends State<HomePage> {
+
+  //userScore
+  int currentScore = 0;
+
+
   //grid dimensions
 
   int rowSize = 10, totalNoOfSquares = 100;
@@ -33,6 +38,16 @@ class _HomePageState extends State<HomePage> {
   //snake direction is intially to the right
   var currentDirection = snakeDirection.RIGHT;
 
+  //game over
+  bool gameOver() {
+    // the game is over when the snake runs into itself
+    List<int> bodySnake = snakePosition.sublist(0,snakePosition.length - 1);
+    if(bodySnake.contains(snakePosition.last)){
+      return true;
+    }
+    return false;
+  }
+
   //startGame
   void startGame() {
     Timer.periodic(Duration(milliseconds: 200), (timer) {
@@ -41,14 +56,24 @@ class _HomePageState extends State<HomePage> {
         //snake moving
         moveSnake();
 
+        if(gameOver()){
 
+          //displaying message to the user 
+          showDialog(context: context, builder: (context){
+            return AlertDialog(
+              title: Text('Game Over'),
+              content: Text('Your score is:'+ currentScore.toString()),
+            );
+          });
+          timer.cancel();
+        }
 
       });
     });
   }
 
   void eatFood(){
-
+    currentScore ++;
     //maki
     while( snakePosition.contains(foodPosition)){
       foodPosition = Random().nextInt(totalNoOfSquares);
@@ -108,6 +133,8 @@ class _HomePageState extends State<HomePage> {
     }
 
   }
+
+
 
   @override
   Widget build(BuildContext context) {
