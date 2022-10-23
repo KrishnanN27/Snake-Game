@@ -41,8 +41,8 @@ class _HomePageState extends State<HomePage> {
   //game over
   bool gameOver() {
     // the game is over when the snake runs into itself
-    List<int> bodySnake = snakePosition.sublist(0, snakePosition.length - 1);
-    if (bodySnake.contains(snakePosition.last)) {
+    List<int> bodySnake = snakePosition.sublist(0, snakePosition.length -1);
+    if (bodySnake.contains(snakePosition.last )) {
       return true;
     }
     return false;
