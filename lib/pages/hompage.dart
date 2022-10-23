@@ -162,112 +162,120 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    //getting the screen width
+
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.grey[800],
-      body: Column(
-        //highscores
-        children: [
-          Expanded(
-              child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              //user current score
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Current Score',
-                    style: myFont.copyWith(color: Colors.grey, fontSize: 10),
-                  ),
-                  SizedBox(
-                    height: 18,
-                  ),
-                  Text(
-                    currentScore.toString(),
-                    style: myFont.copyWith(fontSize: 24),
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'High Scores',
-                    style: myFont.copyWith(color: Colors.grey, fontSize: 10),
-                  ),
-                ],
-              ),
+      body: SizedBox(
+        width: screenWidth > 428  ? 428 : screenWidth,
+        child: Column(
+          //highscores
+          children: [
+            Expanded(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                //user current score
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Current Score',
+                      style: myFont.copyWith(color: Colors.grey, fontSize: 10),
+                    ),
+                    SizedBox(
+                      height: 18,
+                    ),
+                    Text(
+                      currentScore.toString(),
+                      style: myFont.copyWith(fontSize: 24),
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'High Scores',
+                      style: myFont.copyWith(color: Colors.grey, fontSize: 10),
+                    ),
+                  ],
+                ),
 
-              //highscore,top 5
-            ],
-          )),
-          Expanded(
-              flex: 3,
-              child: GestureDetector(
-                onVerticalDragUpdate: (details) {
-                  if (details.delta.dy > 0 &&
-                      currentDirection != snakeDirection.UP) {
-                    // print('move up');
-                    currentDirection = snakeDirection.DOWN;
-                  } else if (details.delta.dy < 0 &&
-                      currentDirection != snakeDirection.DOWN) {
-                    // print('move down');
-                    currentDirection = snakeDirection.UP;
-                  }
-                },
-                onHorizontalDragUpdate: (details) {
-                  if (details.delta.dx > 0 &&
-                      currentDirection != snakeDirection.LEFT) {
-                    // print('move right');
-                    currentDirection = snakeDirection.RIGHT;
-                  } else if (details.delta.dx < 0 &&
-                      currentDirection != snakeDirection.RIGHT) {
-                    // print('move left');
-                    currentDirection = snakeDirection.LEFT;
-                  }
-                },
-                child: GridView.builder(
-                    itemCount: 100,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 10),
-                    itemBuilder: (context, index) {
-                      if (snakePosition.contains(index)) {
-                        return SnakePixel();
-                      } else if (foodPosition == index) {
-                        return FoodPixel();
-                      } else {
-                        return const BlankPixel();
-                      }
-                    }),
-              )),
-          Expanded(
-              child: GestureDetector(
-            onTap: () {
-              gameHasStarted ? () {} : startGame();
-            },
-            child: Padding(
-              padding: EdgeInsets.only(left: 70, right: 70, bottom: 80),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  padding: EdgeInsets.all(30),
-                  color: gameHasStarted ? Colors.grey[700] : Colors.grey,
-                  child: Center(
-                    child: Text(
-                      'PLAY GAME',
-                      style: myFont.copyWith(
-                        fontSize: 10,
+                //highscore,top 5
+              ],
+            )),
+            Expanded(
+                flex: 3,
+                child: GestureDetector(
+                  onVerticalDragUpdate: (details) {
+                    if (details.delta.dy > 0 &&
+                        currentDirection != snakeDirection.UP) {
+                      // print('move up');
+                      currentDirection = snakeDirection.DOWN;
+                    } else if (details.delta.dy < 0 &&
+                        currentDirection != snakeDirection.DOWN) {
+                      // print('move down');
+                      currentDirection = snakeDirection.UP;
+                    }
+                  },
+                  onHorizontalDragUpdate: (details) {
+                    if (details.delta.dx > 0 &&
+                        currentDirection != snakeDirection.LEFT) {
+                      // print('move right');
+                      currentDirection = snakeDirection.RIGHT;
+                    } else if (details.delta.dx < 0 &&
+                        currentDirection != snakeDirection.RIGHT) {
+                      // print('move left');
+                      currentDirection = snakeDirection.LEFT;
+                    }
+                  },
+                  child: GridView.builder(
+                      itemCount: 100,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 10),
+                      itemBuilder: (context, index) {
+                        if (snakePosition.contains(index)) {
+                          return SnakePixel();
+                        } else if (foodPosition == index) {
+                          return FoodPixel();
+                        } else {
+                          return const BlankPixel();
+                        }
+                      }),
+                )),
+            Expanded(
+                child: GestureDetector(
+              onTap: () {
+                gameHasStarted ? () {} : startGame();
+              },
+              child: Padding(
+                padding: EdgeInsets.only(left: 70, right: 70, bottom: 80),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    padding: EdgeInsets.all(30),
+                    color: gameHasStarted ? Colors.grey[700] : Colors.grey,
+                    child: Center(
+                      child: Text(
+                        'PLAY GAME',
+                        style: myFont.copyWith(
+                          fontSize: 10,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          )),
-        ],
-        //grid
-        //playbutton
+            )),
+          ],
+          //grid
+          //playbutton
+        ),
       ),
     );
   }
