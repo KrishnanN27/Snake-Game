@@ -43,6 +43,11 @@ flutter_icons:
   image_path: "lib/images/snake.webp"
   adaptive_icon_background: "#58626C"
   adaptive_icon_foreground: "lib/images/1024.png"
+flutter_native_splash:
+  android: true
+  ios: true
+  color: "#58626C"
+  image: lib/images/1024.png
 
 
   # The following adds the Cupertino Icons font to your application.
