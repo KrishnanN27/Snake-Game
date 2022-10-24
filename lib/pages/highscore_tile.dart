@@ -29,16 +29,16 @@ class HighScoreTile extends StatelessWidget {
 
               Row(
                 children: [
-                  Text(data['name'],style: myFont.copyWith(color: Colors.white,fontSize: 10),),
+                  Text(data['name'],style: myFont.copyWith(color: Colors.grey,fontSize: 10),),
                   SizedBox(width: 10,),
-                  Text(data['score'].toString(),style: myFont.copyWith(color: Colors.white,fontSize: 10),),
+                  Text(data['score'].toString(),style: myFont.copyWith(color: Colors.grey,fontSize: 10),),
 
                 ],),
             ],
           );
         }
         else{
-          return Text('loading',style: myFont.copyWith(color: Colors.white,fontSize: 10),);
+          return Text('loading',style: myFont.copyWith(color: Colors.grey,fontSize: 10),);
         }
         });
   }

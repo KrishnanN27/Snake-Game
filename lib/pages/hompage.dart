@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:snake/pages/blank_pixel.dart';
 import 'package:snake/pages/food_pixel.dart';
@@ -202,135 +203,160 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     //getting the screen width
+     var myFont = GoogleFonts.pressStart2p(
+        textStyle: TextStyle(color: Colors.black, letterSpacing: 3));
 
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Colors.grey[800],
-      body: SizedBox(
-        width: screenWidth > 428 ? 428 : screenWidth,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            //highscores
-            children: [
-              Expanded(
-                  child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  //user current score
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+      body: RawKeyboardListener(
+        focusNode: FocusNode(),
+        autofocus: true,
+        onKey: (event){
+          if(event.isKeyPressed(LogicalKeyboardKey.arrowDown)){
+            currentDirection = snakeDirection.DOWN;
+          }else if(event.isKeyPressed(LogicalKeyboardKey.arrowUp) ){
+            currentDirection = snakeDirection.UP;
+          }else if(event.isKeyPressed(LogicalKeyboardKey.arrowRight ) ){
+            currentDirection = snakeDirection.RIGHT;
+          }else if(event.isKeyPressed(LogicalKeyboardKey.arrowLeft)){
+            currentDirection = snakeDirection.LEFT;
+          }
+
+        },
+        child: Center(
+          child: SizedBox(
+            width: screenWidth > 428 ? 428 : screenWidth,
+            child: Center(
+              child: Padding(
+                padding:  const EdgeInsets.all(12.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  //highscores
+                  children: [
+                    Expanded(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
-                          'Current Score',
-                          style:
-                              myFont.copyWith(color: Colors.grey, fontSize: 10),
+                        //user current score
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Current Score',
+                                style:
+                                    myFont.copyWith(color: Colors.grey, fontSize: 10),
+                              ),
+                              SizedBox(
+                                height: 18,
+                              ),
+                              Text(
+                                currentScore.toString(),
+                                style: myFont.copyWith(fontSize: 24),
+                              ),
+                            ],
+                          ),
                         ),
-                        SizedBox(
-                          height: 18,
+                        SizedBox(width: 12,),
+                        Expanded(
+                          child:
+                              Padding(
+                                padding: const EdgeInsets.all(13.0),
+                                child: gameHasStarted
+                                    ? Container()
+                                    : FutureBuilder(
+                                    future: letGetDocIds,
+                                    builder: (context, snapshot) {
+                                      return ListView.builder(
+                                          itemCount: highscoreListId.length,
+                                          itemBuilder: (context, index) {
+                                            return HighScoreTile(
+                                                documentId: highscoreListId[index]);
+                                          });
+                                    }),
+                              ),
+
                         ),
-                        Text(
-                          currentScore.toString(),
-                          style: myFont.copyWith(fontSize: 24),
-                        ),
+                        //high score,top 5
+
                       ],
-                    ),
-                  ),
-                  SizedBox(width: 12,),
-                  Expanded(
-                    child:
-                        Padding(
-                          padding: const EdgeInsets.all(13.0),
-                          child: gameHasStarted
-                              ? Container()
-                              : FutureBuilder(
-                              future: letGetDocIds,
-                              builder: (context, snapshot) {
-                                return ListView.builder(
-                                    itemCount: highscoreListId.length,
-                                    itemBuilder: (context, index) {
-                                      return HighScoreTile(
-                                          documentId: highscoreListId[index]);
-                                    });
+                    )),
+                    Expanded(
+                        flex: 3,
+                        child: GestureDetector(
+                          onVerticalDragUpdate: (details) {
+                            if (details.delta.dy > 0 &&
+                                currentDirection != snakeDirection.UP) {
+                              // print('move up');
+                              currentDirection = snakeDirection.DOWN;
+                            } else if (details.delta.dy < 0 &&
+                                currentDirection != snakeDirection.DOWN) {
+                              // print('move down');
+                              currentDirection = snakeDirection.UP;
+                            }
+                          },
+                          onHorizontalDragUpdate: (details) {
+                            if (details.delta.dx > 0 &&
+                                currentDirection != snakeDirection.LEFT) {
+                              // print('move right');
+                              currentDirection = snakeDirection.RIGHT;
+                            } else if (details.delta.dx < 0 &&
+                                currentDirection != snakeDirection.RIGHT) {
+                              // print('move left');
+                              currentDirection = snakeDirection.LEFT;
+                            }
+                          },
+                          child: GridView.builder(
+                              itemCount: 100,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 10),
+                              itemBuilder: (context, index) {
+                                if (snakePosition.contains(index)) {
+                                  return SnakePixel();
+                                } else if (foodPosition == index) {
+                                  return FoodPixel();
+                                } else {
+                                  return const BlankPixel();
+                                }
                               }),
-                        ),
-
-                  ),
-                  //high score,top 5
-
-                ],
-              )),
-              Expanded(
-                  flex: 3,
-                  child: GestureDetector(
-                    onVerticalDragUpdate: (details) {
-                      if (details.delta.dy > 0 &&
-                          currentDirection != snakeDirection.UP) {
-                        // print('move up');
-                        currentDirection = snakeDirection.DOWN;
-                      } else if (details.delta.dy < 0 &&
-                          currentDirection != snakeDirection.DOWN) {
-                        // print('move down');
-                        currentDirection = snakeDirection.UP;
-                      }
-                    },
-                    onHorizontalDragUpdate: (details) {
-                      if (details.delta.dx > 0 &&
-                          currentDirection != snakeDirection.LEFT) {
-                        // print('move right');
-                        currentDirection = snakeDirection.RIGHT;
-                      } else if (details.delta.dx < 0 &&
-                          currentDirection != snakeDirection.RIGHT) {
-                        // print('move left');
-                        currentDirection = snakeDirection.LEFT;
-                      }
-                    },
-                    child: GridView.builder(
-                        itemCount: 100,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 10),
-                        itemBuilder: (context, index) {
-                          if (snakePosition.contains(index)) {
-                            return SnakePixel();
-                          } else if (foodPosition == index) {
-                            return FoodPixel();
-                          } else {
-                            return const BlankPixel();
-                          }
-                        }),
-                  )),
-              Text('@CREATEDBYKRISHNA',style: myFont,),
-              SizedBox(height: 29,),
-              Expanded(
-                  child: GestureDetector(
-                onTap: () {
-                  gameHasStarted ? () {} : startGame();
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(left: 70, right: 70, bottom: 80),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Container(
-                      padding: EdgeInsets.all(30),
-                      color: gameHasStarted ? Colors.grey[700] : Colors.grey,
-                      child: Center(
-                        child: Text(
-                          'PLAY GAME',
-                          style: myFont.copyWith(
-                            fontSize: 10,
+                        )),
+                    screenWidth > 428 ? const Text('You can also use your arrow keys to play',style: TextStyle(color: Colors.white,fontSize: 18)): Container(),
+                    // Text('@CREATEDBYKRISHNA',style: myFont,),
+                    SizedBox(height: 24,),
+                    Expanded(
+                        child: GestureDetector(
+                      onTap: () {
+                        gameHasStarted ? () {} : startGame();
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 70, right: 70, bottom: 80),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            padding: EdgeInsets.all(20),
+                            color: gameHasStarted ? Colors.grey[700] : Colors.grey,
+                            child: Center(
+                              child: Text(
+                                'START GAME',
+                                style: myFont.copyWith(
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
+                    )),
+                  ],
+                  //grid
+                  //playbutton
                 ),
-              )),
-            ],
-            //grid
-            //playbutton
+              ),
+            ),
           ),
         ),
       ),
