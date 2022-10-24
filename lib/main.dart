@@ -6,7 +6,7 @@ import 'package:snake/pages/intro_screen.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      options: FirebaseOptions(
+      options: const FirebaseOptions(
           apiKey: "AIzaSyD9ZDRrvHcllnf91W2kEoCZVuPkVD5Oyyg",
           authDomain: "snakegame-419d4.firebaseapp.com",
           projectId: "snakegame-419d4",
