@@ -20,14 +20,18 @@ class _IntroScreenState extends State<IntroScreen>
 
   @override
   Widget build(BuildContext context) {
-    final color = Colors.white;
+
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.grey[800],
         body: Center(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                   child: Padding(
@@ -35,7 +39,7 @@ class _IntroScreenState extends State<IntroScreen>
                 child: Container(
                   child: Text(
                     'Snake. sk',
-                    style: myFontWhite.copyWith(fontSize: 30),
+                    style: myFontWhite.copyWith(fontSize: 30,color: Colors.grey),
                   ),
                 ),
               )),
@@ -67,9 +71,10 @@ class _IntroScreenState extends State<IntroScreen>
                 padding: EdgeInsets.only(top: 80),
                 child: Text(
                   '@CREATEDBYKRISHNA',
-                  style: myFontWhite.copyWith(fontSize: 18),
+                  style: myFontWhite.copyWith(fontSize: 18,color: Colors.grey),
                 ),
               )),
+
               GestureDetector(
                 onTap: () {
                   Navigator.push(context,
@@ -81,17 +86,18 @@ class _IntroScreenState extends State<IntroScreen>
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
                       padding: EdgeInsets.all(30),
-                      color: Colors.white,
+                      color: Colors.grey,
                       child: Center(
                         child: Text(
                           'PLAY GAME',
-                          style: myFont,
+                          style: myFont.copyWith(color: Colors.grey[800]),
                         ),
                       ),
                     ),
                   ),
                 ),
               )
+
             ],
           ),
         ),
