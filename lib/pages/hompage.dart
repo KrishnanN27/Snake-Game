@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -77,6 +78,9 @@ class _HomePageState extends State<HomePage> {
             }));
   }
 
+  void _showDialog(){}
+
+
   //startGame
   void startGame() {
     gameHasStarted = true;
@@ -92,13 +96,17 @@ class _HomePageState extends State<HomePage> {
               barrierDismissible: false,
               builder: (context) {
                 return AlertDialog(
-                  title: Text('Game Over'),
-                  content: Column(
+                  title: Center(child: Text('Game Over',style: myFont,)),
+                  content:  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Your score is:' + currentScore.toString()),
+                      Text('Your score is:' + currentScore.toString(),style: myFont.copyWith(letterSpacing: 2,fontSize: 8),),
+                      SizedBox(height: 12,),
                       TextField(
                         controller: nameController,
-                        decoration: InputDecoration(hintText: "Enter Name"),
+                        decoration: InputDecoration(hintText: "Enter Name",hintStyle: myFont.copyWith(color: Colors.grey[700],letterSpacing: 1,fontSize: 8),),
                       )
                     ],
                   ),
@@ -109,9 +117,24 @@ class _HomePageState extends State<HomePage> {
                         Navigator.pop(context);
                         newGame();
                       },
-                      child: Text('Submit'),
+                      elevation: 24,
+                      child: Text('Submit',style: myFont.copyWith(fontSize: 10,color: Colors.grey,letterSpacing: 1,),),
+                      color: Colors.grey[800],
+
+                    ),
+                    MaterialButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        newGame();
+                      },
+                      elevation: 24,
+                      child: Text('Cancel',style: myFont.copyWith(fontSize: 10,color: Colors.grey,letterSpacing: 1,),),
+                      color: Colors.grey[800],
+
                     )
                   ],
+                  elevation: 24,
+                  backgroundColor: Colors.grey,
                 );
               });
           timer.cancel();
@@ -313,7 +336,7 @@ class _HomePageState extends State<HomePage> {
                           child: GridView.builder(
                               itemCount: 100,
                               physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 10),
                               itemBuilder: (context, index) {
                                 if (snakePosition.contains(index)) {
