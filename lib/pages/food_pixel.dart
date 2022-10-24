@@ -5,8 +5,15 @@ class FoodPixel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Image.asset("lib/images/a.jpg"),
+    return Padding(
+      padding: const EdgeInsets.all(2.0),
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4)
+        ),
+        child: Image.asset("lib/images/a.jpg",fit: BoxFit.cover,width: 5,),
+      ),
     );
   }
 }

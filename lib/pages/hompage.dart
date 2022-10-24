@@ -344,7 +344,7 @@ class _HomePageState extends State<HomePage> {
                               child: Text(
                                 'START GAME',
                                 style: myFont.copyWith(
-                                  fontSize: 10,
+                                  fontSize: 9,
                                 ),
                               ),
                             ),
