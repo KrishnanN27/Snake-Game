@@ -48,6 +48,7 @@ class _HomePageState extends State<HomePage> {
   //snake direction is intially to the right
   var currentDirection = snakeDirection.RIGHT;
 
+
   //game over
   bool gameOver() {
     // the game is over when the snake runs into itself
@@ -324,7 +325,7 @@ class _HomePageState extends State<HomePage> {
                                 }
                               }),
                         )),
-                    screenWidth > 428 ? const Text('You can also use your arrow keys to play',style: TextStyle(color: Colors.white,fontSize: 18)): Container(),
+                    screenWidth > 428 ?  Text('You can also use your arrow keys to play',style: myFont.copyWith(color: Colors.grey,letterSpacing: 2,fontSize: 8)): Container(),
                     // Text('@CREATEDBYKRISHNA',style: myFont,),
                     SizedBox(height: 24,),
                     Expanded(

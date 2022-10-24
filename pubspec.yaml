@@ -37,6 +37,12 @@ dependencies:
   avatar_glow: ^2.0.2
   flutter_launcher_icons: ^0.10.0
   flutter_native_splash: ^2.2.11
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "lib/images/snake.webp"
+  adaptive_icon_background: "#58626C"
+  adaptive_icon_foreground: "lib/images/1024.png"
 
 
   # The following adds the Cupertino Icons font to your application.
