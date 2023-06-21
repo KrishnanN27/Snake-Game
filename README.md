@@ -1,16 +1,12 @@
-# snake
+# Snake. sk
 
-A new Flutter project.
+A snake Flutter project that I created using reference during my holidays.
 
-## Getting Started
+## Screenshot
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<p align="center">
+  <img src="lib/images/s1.png" alt="Project Picture" width="1000">
+</p>
+<p align="center">
+  <img src="lib/images/s2.png" alt="Project Picture" width="1000">
+</p>
